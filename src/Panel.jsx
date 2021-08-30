@@ -1,45 +1,55 @@
-import React, { useState } from 'react'
-import logo from './logo.svg'
+import React from 'react'
+import {
+  AppBar, Drawer, Icon, IconButton, Toolbar, Typography
+} from '@material-ui/core'
 import './Panel.css'
+import { useMachine } from '@xstate/react'
+import toggleUICollapsed from './toggleUICollapsed'
+import { toggleIconDataUri } from 'itk-viewer-icons'
 
-function App() {
-  const [count, setCount] = useState(0)
+function Panel(props) {
+  const { children, context } = props
+  const [state, send] = useMachine(context.service.machine)
+  toggleUICollapsed(context)
+
+  const handleToggle = () => {
+    send('TOGGLE_UI_COLLAPSED')
+  }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className='root'>
+      <AppBar className='appBar'>
+        <Toolbar>
+          <IconButton
+            color='inherit'
+            onClick={ handleToggle }
+            edge='start'
           >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+            <Icon>
+              <img src={ toggleIconDataUri } alt='toggle'/>
+            </Icon>
+          </IconButton>
+          <Typography variant='h5' noWrap>
+            ITK Viewer
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        className='drawer'
+        variant='persistent'
+        anchor='left'
+        open={ !context.uiCollapsed }
+      >
+        <div>
+          {
+            React.Children.map(children, (child) => {
+              return React.cloneElement(child, { context, state, send })
+            })
+          }
+        </div>
+      </Drawer>
     </div>
   )
 }
 
-export default App
+export default Panel

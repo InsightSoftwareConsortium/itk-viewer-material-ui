@@ -21,7 +21,7 @@ function createInterface(context) {
 
   context.uiPanel = ReactDOM.render(
     <React.StrictMode>
-      <Panel />
+      <Panel context={context} />
     </React.StrictMode>,
     context.uiContainer
   )
