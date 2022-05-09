@@ -23,6 +23,7 @@ function AppToolbar(props) {
     <AppBar className="appBar">
       <Toolbar>
         <IconButton
+          id="toggleDrawer"
           size="small"
           ref={collapseUIButton}
           color="inherit"
