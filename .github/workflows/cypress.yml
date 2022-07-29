@@ -38,7 +38,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run:
+        run: |
           git config --global user.name "Github Actions"
           git config --global user.email "laryssa.abdala@kitware.com"
           npm run semantic-release
