@@ -8,7 +8,7 @@ jobs:
     name: ITK Viewer Material UI Tests
     runs-on: ubuntu-20.04
     container:
-      image: cypress/browsers:node16.14.0-chrome99-ff97
+      image: cypress/browsers:node16.14.2-slim-chrome103-ff102
       options: --user 1001
 
     steps:
@@ -33,6 +33,8 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           browser: firefox
+          start: npm start
+
 
       - name: Release
         env:
