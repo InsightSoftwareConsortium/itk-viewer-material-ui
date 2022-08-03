@@ -53,6 +53,6 @@
     "url": "https://github.com/InsightSoftwareConsortium/itk-viewer-material-ui.git"
   },
 "release": {
-  "branches": ["master", "next"]
+  "branches": ["main"]
   }
 }
