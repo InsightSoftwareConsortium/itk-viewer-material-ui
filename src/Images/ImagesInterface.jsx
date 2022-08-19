@@ -43,10 +43,7 @@ function ImagesInterface(props) {
     <div className={visible() ? '' : 'hidden'}>
       {actorContext && (
         <div>
-          <div
-            ref={imagesUIGroup}
-            className="uiGroup uiImages"
-          >
+          <div ref={imagesUIGroup} className="uiGroup uiImages">
             <ColorRangeInput {...props} />
             <ComponentSelector {...props} />
             <TransferFunctionWidget {...props} />

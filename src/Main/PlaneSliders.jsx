@@ -23,13 +23,15 @@ function PlaneSliders(props) {
   const visRefs = [xVisibility, yVisibility, zVisibility]
   const scrollRefs = [xScroll, yScroll, zScroll]
   const { slicingPlanes, viewMode } = state.context.main
-  const [slidersClass, setClass] = useState(0);
+  const [slidersClass, setClass] = useState(0)
 
   useEffect(() => {
-    window.addEventListener("resize", () => getClass())
+    window.addEventListener('resize', () => getClass())
   }, [])
 
-  useEffect(() => { getClass() }, [state.context.uiDrawer?.clientHeight])
+  useEffect(() => {
+    getClass()
+  }, [state.context.uiDrawer?.clientHeight])
 
   const getClass = () => {
     if (state.context.uiCollapsed) {
@@ -38,7 +40,8 @@ function PlaneSliders(props) {
     const containerHeight = state.context.container.clientHeight
     const panelHeight = state.context.uiDrawer?.clientHeight || 0
     const slidersHeight = planeSliders.current?.clientHeight || 0
-    const panel_offset = state.context.main.collapseUIButton?.parentNode?.clientHeight || 0
+    const panel_offset =
+      state.context.main.collapseUIButton?.parentNode?.clientHeight || 0
     if (containerHeight - (panelHeight + panel_offset) < slidersHeight) {
       setClass('uiSlidersGroupCondensed')
     } else {
@@ -81,86 +84,86 @@ function PlaneSliders(props) {
   return (
     <div ref={planeSliders} className={slidersClass}>
       {planes.map((plane, idx) => {
-        return (
-          state.context.main[`${plane}Slice`] ? (
-            <div
-              key={plane.toUpperCase()}
-              className={`planeSliders ${sliderVisible(plane)}`}
+        return state.context.main[`${plane}Slice`] ? (
+          <div
+            key={plane.toUpperCase()}
+            className={`planeSliders ${sliderVisible(plane)}`}
+          >
+            <Tooltip
+              ref={visRefs[idx]}
+              title={`${plane.toUpperCase()} Plane Visibility`}
+              PopperProps={{
+                anchorEl: visRefs[idx].current,
+                disablePortal: true,
+                keepMounted: true
+              }}
             >
-              <Tooltip
-                ref={visRefs[idx]}
-                title={`${plane.toUpperCase()} Plane Visibility`}
-                PopperProps={{
-                  anchorEl: visRefs[idx].current,
-                  disablePortal: true,
-                  keepMounted: true
-                }}
-              >
-                <IconButton
-                  size="small"
-                  className={`sliderIcons ${
-                    viewMode !== 'Volume' ? 'hidden' : ''
-                  }`}
-                  onClick={(_e) => {
-                    toggleVisibility(plane)
-                  }}
-                >
-                  <Icon>
-                    {slicingPlanes[`${plane}`].visible ? (
-                      <img src={visibleIconDataUri} />
-                    ) : (
-                      <img
-                        className="toggledOffIcon"
-                        src={invisibleIconDataUri}
-                      />
-                    )}
-                  </Icon>
-                </IconButton>
-              </Tooltip>
-              <Tooltip
-                ref={scrollRefs[idx]}
-                title={`${plane.toUpperCase()} Plane Toggle Scroll`}
-                PopperProps={{
-                  anchorEl: scrollRefs[idx].current,
-                  disablePortal: true,
-                  keepMounted: true
-                }}
-              >
-                <IconButton
-                  size="small"
-                  className="sliderIcons"
-                  onClick={(_e) => {
-                    togglePlay(plane)
-                  }}
-                >
-                  <Icon>
-                    {slicingPlanes[`${plane}`].scroll ? (
-                      <img src={pauseIconDataUri} />
-                    ) : (
-                      <img className="toggledOffIcon" src={playIconDataUri} />
-                    )}
-                  </Icon>
-                </IconButton>
-              </Tooltip>
-              <Chip
-                className="sliderIcons"
+              <IconButton
                 size="small"
-                label={`${plane.toUpperCase()}: ${state.context.main[
-                  `${plane}Slice`
-                ].toFixed(3)}`}
-                color="secondary"
-              />
-              <Slider
-                min={slicingPlanes[`${plane}`].min}
-                max={slicingPlanes[`${plane}`].max}
-                step={slicingPlanes[`${plane}`].step}
-                value={state.context.main[`${plane}Slice`]}
-                onChange={(_e, val) => {
-                  handleSliderChange(plane, val)
+                className={`sliderIcons ${
+                  viewMode !== 'Volume' ? 'hidden' : ''
+                }`}
+                onClick={(_e) => {
+                  toggleVisibility(plane)
                 }}
-              />
-            </div>
-          ) : <div key={plane.toUpperCase()+'hidden'}/>
+              >
+                <Icon>
+                  {slicingPlanes[`${plane}`].visible ? (
+                    <img src={visibleIconDataUri} />
+                  ) : (
+                    <img
+                      className="toggledOffIcon"
+                      src={invisibleIconDataUri}
+                    />
+                  )}
+                </Icon>
+              </IconButton>
+            </Tooltip>
+            <Tooltip
+              ref={scrollRefs[idx]}
+              title={`${plane.toUpperCase()} Plane Toggle Scroll`}
+              PopperProps={{
+                anchorEl: scrollRefs[idx].current,
+                disablePortal: true,
+                keepMounted: true
+              }}
+            >
+              <IconButton
+                size="small"
+                className="sliderIcons"
+                onClick={(_e) => {
+                  togglePlay(plane)
+                }}
+              >
+                <Icon>
+                  {slicingPlanes[`${plane}`].scroll ? (
+                    <img src={pauseIconDataUri} />
+                  ) : (
+                    <img className="toggledOffIcon" src={playIconDataUri} />
+                  )}
+                </Icon>
+              </IconButton>
+            </Tooltip>
+            <Chip
+              className="sliderIcons"
+              size="small"
+              label={`${plane.toUpperCase()}: ${state.context.main[
+                `${plane}Slice`
+              ].toFixed(3)}`}
+              color="secondary"
+            />
+            <Slider
+              min={slicingPlanes[`${plane}`].min}
+              max={slicingPlanes[`${plane}`].max}
+              step={slicingPlanes[`${plane}`].step}
+              value={state.context.main[`${plane}Slice`]}
+              onChange={(_e, val) => {
+                handleSliderChange(plane, val)
+              }}
+            />
+          </div>
+        ) : (
+          <div key={plane.toUpperCase() + 'hidden'} />
         )
       })}
     </div>

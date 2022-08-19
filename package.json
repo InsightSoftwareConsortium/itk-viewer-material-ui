@@ -5,7 +5,7 @@
     "build": "vite build",
     "start": "vite --port 8080",
     "start:production": "vite preview --port 8080",
-    "prettier": "prettier --config ./prettier.json --write ./src/**/*.{js,jsx}",
+    "prettier": "prettier --write ./src/**/*.{js,jsx}",
     "postversion": "npm publish && git push --follow-tags",
     "cypress:open": "npx cypress open",
     "cypress:run": "npx cypress run --config defaultCommandTimeout=8000",
@@ -29,6 +29,7 @@
     "cypress-react-selector": "^2.3.17",
     "husky": "^7.0.4",
     "itk-viewer-icons": "^11.11.2",
+    "itk-viewer-transfer-function-editor": "^1.1.2",
     "prettier": "^2.5.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
@@ -46,13 +47,26 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx}": "prettier --config ./prettier.json --write"
+    "*.{js,jsx}": "prettier --write"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/InsightSoftwareConsortium/itk-viewer-material-ui.git"
   },
-"release": {
-  "branches": ["main"]
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "jsxSingleQuote": false,
+    "bracketSpacing": true,
+    "tabWidth": 2,
+    "useTabs": false,
+    "trailingComma": "none",
+    "proseWrap": "always",
+    "endOfLine": "lf"
   }
 }
