@@ -2,12 +2,11 @@ name: Cypress Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
-
   test-material-ui-viewer:
     name: ITK Viewer Material UI Tests
     runs-on: ubuntu-20.04
@@ -28,17 +27,17 @@ jobs:
           npm run build
 
       - name: Test with Chrome
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           browser: chrome
           start: npm start
 
       - name: Test with Firefox
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           browser: firefox
           start: npm start
-
+          config: baseUrl=http://localhost:8081
 
       - name: Release
         env:

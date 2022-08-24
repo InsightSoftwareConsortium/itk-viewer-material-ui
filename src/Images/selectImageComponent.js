@@ -1,18 +1,13 @@
 import applyColorRange from './applyColorRange'
 import applyColorMap from './applyColorMap'
+import applyHistogram from './applyHistogram'
 
 function selectImageComponent(context, event) {
-  context.images.componentSelector.value = event.data
-
   const name = event.data.name
   const actorContext = context.images.actorContext.get(name)
   const component = event.data.component
 
-  const gaussians = actorContext.piecewiseFunctionGaussians.get(component)
   const transferFunctionWidget = context.images.transferFunctionWidget
-  if (transferFunctionWidget && gaussians) {
-    transferFunctionWidget.setGaussians(gaussians)
-  }
 
   if (actorContext.colorRanges.has(component)) {
     const range = actorContext.colorRanges.get(component)
@@ -20,11 +15,16 @@ function selectImageComponent(context, event) {
       data: {
         name,
         component,
-        range
+        range,
+        dontUpdatePoints: true
       }
     })
-    transferFunctionWidget.setDataRange(range)
-    transferFunctionWidget.render()
+  }
+
+  const piecewiseFunctionPoints =
+    actorContext.piecewiseFunctionPoints.get(component)
+  if (transferFunctionWidget && piecewiseFunctionPoints) {
+    transferFunctionWidget.setPoints(piecewiseFunctionPoints)
   }
 
   if (actorContext.colorMaps.has(component)) {
@@ -35,15 +35,23 @@ function selectImageComponent(context, event) {
         colorMap: actorContext.colorMaps.get(component)
       }
     })
-    context.images.iconSelector.setSelectedValue(
-      actorContext.colorMaps.get(component)
-    )
   }
 
-  context.service.send({
-    type: 'UPDATE_IMAGE_HISTOGRAM',
-    data: { name, component }
-  })
+  const histogram = actorContext.histograms.get(component)
+  if (histogram) {
+    applyHistogram(context, {
+      data: {
+        name,
+        component,
+        histogram
+      }
+    })
+  } else {
+    context.service.send({
+      type: 'UPDATE_IMAGE_HISTOGRAM',
+      data: { name, component }
+    })
+  }
 }
 
 export default selectImageComponent
