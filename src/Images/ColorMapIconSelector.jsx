@@ -39,7 +39,7 @@ function ColorMapIconSelector(props) {
     const actorContext = state.context.images.actorContext.get(name)
     const componentIndex = actorContext.selectedComponent
     send({
-      type: 'IMAGE_COLOR_MAP_CHANGED',
+      type: 'IMAGE_COLOR_MAP_SELECTED',
       data: { name, component: componentIndex, colorMap }
     })
   }
