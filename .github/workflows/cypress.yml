@@ -33,10 +33,10 @@ jobs:
           browser: chrome
           start: npm start
 
-      - name: Test with Firefox
+      - name: Test with Electron
         uses: cypress-io/github-action@v4
         with:
-          browser: firefox
+          browser: electron
           start: npm start
           config: baseUrl=http://localhost:8081
 
