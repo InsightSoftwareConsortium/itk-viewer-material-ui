@@ -27,18 +27,11 @@ jobs:
         run: |
           npm run build
 
-      - name: Test with Chrome
-        uses: cypress-io/github-action@v4
-        with:
-          browser: chrome
-          start: npm start
-
       - name: Test with Electron
         uses: cypress-io/github-action@v4
         with:
           browser: electron
           start: npm start
-          config: baseUrl=http://localhost:8081
 
       - name: Release
         env:
