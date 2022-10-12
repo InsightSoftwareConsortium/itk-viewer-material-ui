@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useActor } from '@xstate/react'
 import { FormControl, Icon, MenuItem, Select, Tooltip } from '@mui/material'
-import ColorMapPresetIcons from '../ColorMapPresetIcons'
+import { ColorMapIcons } from 'itk-viewer-color-maps'
 import '../style.css'
 
 function ColorMapIconSelector(props) {
@@ -9,7 +9,7 @@ function ColorMapIconSelector(props) {
   const iconSelector = useRef(null)
   const [state, send] = useActor(service)
   let colorMapIcons = []
-  ColorMapPresetIcons.forEach((value, key) => {
+  ColorMapIcons.forEach((value, key) => {
     colorMapIcons.push({
       name: key,
       icon: value,
@@ -26,10 +26,7 @@ function ColorMapIconSelector(props) {
     if (state.context.images.actorContext) {
       const actorContext = state.context.images.actorContext.get(name)
       const component = actorContext.selectedComponent
-      const lookupTableProxies = state.context.images.lookupTableProxies
-      if (lookupTableProxies) {
-        return lookupTableProxies.get(component).getPresetName()
-      }
+      return actorContext.colorMaps.get(component)
     }
     return ''
   }
@@ -39,7 +36,7 @@ function ColorMapIconSelector(props) {
     const actorContext = state.context.images.actorContext.get(name)
     const componentIndex = actorContext.selectedComponent
     send({
-      type: 'IMAGE_COLOR_MAP_SELECTED',
+      type: 'IMAGE_COLOR_MAP_CHANGED',
       data: { name, component: componentIndex, colorMap }
     })
   }
