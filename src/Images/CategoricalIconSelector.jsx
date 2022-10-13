@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useActor } from '@xstate/react'
 import { FormControl, Icon, MenuItem, Select } from '@mui/material'
-import CategoricalPresetIcons from '../CategoricalPresetIcons'
+import { CategoricalColorIcons } from 'itk-viewer-color-maps'
 import '../style.css'
 
 function CategoricalIconSelector(props) {
@@ -10,7 +10,7 @@ function CategoricalIconSelector(props) {
   const [state, send] = useActor(service)
 
   let catergoricalPresetIcons = []
-  CategoricalPresetIcons.forEach((value, key) => {
+  CategoricalColorIcons.forEach((value, key) => {
     catergoricalPresetIcons.push({
       name: key,
       icon: value
@@ -21,7 +21,7 @@ function CategoricalIconSelector(props) {
     state.context.images.labelImageIconSelector = iconSelector
   }, [])
 
-  const currentCatergoricalPreset = () => {
+  const currentCategoricalPreset = () => {
     const name = state.context.images.selectedName
     if (state.context.images.actorContext) {
       const actorContext = state.context.images.actorContext.get(name)
@@ -46,7 +46,7 @@ function CategoricalIconSelector(props) {
       style={{ width: '154px', margin: '0 5px' }}
     >
       <Select
-        value={currentCatergoricalPreset()}
+        value={currentCategoricalPreset()}
         style={{ height: '40px' }}
         onChange={(e) => {
           handleChange(e.target.value)

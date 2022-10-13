@@ -5,14 +5,16 @@ import '../style.css'
 import { setup } from './transferFunctionWidgetUtils'
 import { getSelectedImageContext } from './getSelectedImageContext'
 
-const selectLookupTable = (state) => {
-  const { selectedComponent } = getSelectedImageContext(state)
-  const lookupTableProxy =
-    state.context.images.lookupTableProxies?.get(selectedComponent)
-  return [lookupTableProxy, lookupTableProxy?.getPresetName()]
+const selectColorMap = (state) => {
+  const { colorMaps, selectedComponent } = getSelectedImageContext(state)
+  const colorTransferFunction =
+    state.context.images.colorTransferFunctions?.get(selectedComponent)
+  const colorMap = colorMaps?.get(selectedComponent)
+  return [colorTransferFunction, colorMap]
 }
 
-const lookupProxyCompare = ([, oldName], [, newName]) => oldName === newName
+const colorMapCompare = ([oldColorTF, oldName], [newColorTF, newName]) =>
+  oldColorTF === newColorTF && oldName === newName
 
 function TransferFunctionWidget({ service }) {
   const transferFunctionWidgetContainer = useRef(null)
@@ -27,18 +29,18 @@ function TransferFunctionWidget({ service }) {
     }
   }, [transferFunctionWidgetContainer, service.machine.context])
 
-  const [lookupTable, presetNameToTriggerUpdate] = useSelector(
+  const [colorTransferFunction, presetNameToTriggerUpdate] = useSelector(
     service,
-    selectLookupTable,
-    lookupProxyCompare
+    selectColorMap,
+    colorMapCompare
   )
   useEffect(() => {
-    if (transferFunctionWidget.current && lookupTable) {
+    if (transferFunctionWidget.current && colorTransferFunction) {
       transferFunctionWidget.current.setColorTransferFunction(
-        lookupTable.getLookupTable()
+        colorTransferFunction
       )
     }
-  }, [transferFunctionWidget, presetNameToTriggerUpdate, lookupTable])
+  }, [transferFunctionWidget, presetNameToTriggerUpdate, colorTransferFunction])
 
   return (
     <div className="uiRow" style={{ background: 'rgba(127, 127, 127, 0.5)' }}>
