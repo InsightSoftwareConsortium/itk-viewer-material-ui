@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useActor } from '@xstate/react'
 import { FormControl, Icon, MenuItem, Select, Tooltip } from '@mui/material'
 import { ColorMapIcons } from 'itk-viewer-color-maps'
@@ -8,6 +8,7 @@ function ColorMapIconSelector(props) {
   const { service } = props
   const iconSelector = useRef(null)
   const [state, send] = useActor(service)
+  const [menuOpen, toggleMenuOpen] = useState(false)
   let colorMapIcons = []
   ColorMapIcons.forEach((value, key) => {
     colorMapIcons.push({
@@ -54,6 +55,8 @@ function ColorMapIconSelector(props) {
         onChange={(e) => {
           handleChange(e.target.value)
         }}
+        onOpen={() => {toggleMenuOpen(true)}}
+        onClose={() => {toggleMenuOpen(false)}}
         MenuProps={{
           anchorEl: iconSelector.current,
           disablePortal: true,
@@ -68,7 +71,7 @@ function ColorMapIconSelector(props) {
               title={preset.name}
               placement="bottom"
               PopperProps={{
-                anchorEl: preset.ref.current,
+                anchorEl: menuOpen ? preset.ref.current : iconSelector.current,
                 disablePortal: true,
                 keepMounted: true
               }}
